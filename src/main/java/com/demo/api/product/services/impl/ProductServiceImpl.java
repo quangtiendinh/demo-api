@@ -6,6 +6,7 @@ import com.demo.api.product.dto.filter.ProductFilter;
 import com.demo.api.product.dto.response.ProductResponse;
 import com.demo.api.product.entity.Product;
 import com.demo.api.product.payload.ProductRepository;
+import com.demo.api.product.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -14,10 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,15 +47,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(long id, Product request) {
-        Optional<Product> productOptional = this.productRepository.findById(id);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            product.setTitle(request.getTitle());
-            product.setPrice(request.getPrice());
-            product.setDescription(request.getDescription());
-            return this.productRepository.save(product);
-        }
-        return null;
+        Product product = this.productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundResourceException("The product is not found with id ["+ id +"]"));
+        product.setTitle(request.getTitle());
+        product.setPrice(request.getPrice());
+        product.setDescription(request.getDescription());
+        product.setDescription(request.getDescription());
+        product.setDescription(request.getDescription());
+        return this.productRepository.save(product);
     }
 
     @Override

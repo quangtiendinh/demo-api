@@ -1,4 +1,4 @@
-package com.demo.api.product.services.impl;
+package com.demo.api.product.services;
 
 import com.demo.api.product.dto.filter.ProductFilter;
 import com.demo.api.product.dto.response.ProductResponse;

@@ -3,7 +3,7 @@ package com.demo.api.product.controller;
 import com.demo.api.product.dto.filter.ProductFilter;
 import com.demo.api.product.dto.response.ProductResponse;
 import com.demo.api.product.entity.Product;
-import com.demo.api.product.services.impl.ProductService;
+import com.demo.api.product.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
