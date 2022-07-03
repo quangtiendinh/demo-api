@@ -8,13 +8,13 @@ For building and running the application you need:
 - IntelliJ
 
 ## How to Run
-- Clone the projec
+- Clone the project
 
 - Maven build project
 ```
 mvn clean install -DskipTests
 ```
-- Run using docker-compose
+- Run application using docker-compose
 ```
 docker compose build --no-cache
 ```
