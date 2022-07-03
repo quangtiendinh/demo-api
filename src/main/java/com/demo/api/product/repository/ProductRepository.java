@@ -1,4 +1,4 @@
-package com.demo.api.product.payload;
+package com.demo.api.product.repository;
 
 import com.demo.api.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

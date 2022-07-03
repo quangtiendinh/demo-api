@@ -3,14 +3,18 @@ package com.demo.api.product.services.impl;
 import com.demo.api.core.expections.NotFoundResourceException;
 import com.demo.api.core.utils.BeanUtil;
 import com.demo.api.product.dto.filter.ProductFilter;
+import com.demo.api.product.dto.request.ProductAddRequest;
+import com.demo.api.product.dto.request.ProductUpdateRequest;
 import com.demo.api.product.dto.response.ProductResponse;
 import com.demo.api.product.entity.Product;
-import com.demo.api.product.payload.ProductRepository;
+import com.demo.api.product.repository.ProductRepository;
 import com.demo.api.product.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,28 +39,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Cacheable(cacheNames = "product", key = "#id", unless = "#result == null")
     @Override
-    public Product getById(long id) {
-        return this.productRepository.findById(id)
+    public ProductResponse getById(long id) {
+        Product product = this.productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundResourceException("The product is not found with id ["+ id +"]"));
+        return BeanUtil.copyProperties(product, ProductResponse.class);
     }
 
+    @CacheEvict(cacheNames = "products", allEntries = true)
     @Override
-    public Product add(Product product) {
-        return this.productRepository.save(product);
+    public ProductResponse add(ProductAddRequest request) {
+        Product product = BeanUtil.copyProperties(request, Product.class);
+        return BeanUtil.copyProperties(this.productRepository.save(product), ProductResponse.class);
     }
 
+    @CacheEvict(cacheNames = "products", allEntries = true)
     @Override
-    public Product update(long id, Product request) {
+    public ProductResponse update(long id, ProductUpdateRequest request) {
         Product product = this.productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundResourceException("The product is not found with id ["+ id +"]"));
         product.setTitle(request.getTitle());
         product.setPrice(request.getPrice());
         product.setDescription(request.getDescription());
-        product.setDescription(request.getDescription());
-        product.setDescription(request.getDescription());
-        return this.productRepository.save(product);
+        return BeanUtil.copyProperties(this.productRepository.save(product), ProductResponse.class);
     }
 
+    @Caching(evict = { @CacheEvict(cacheNames = "product", key = "#id"),
+            @CacheEvict(cacheNames = "products", allEntries = true) })
     @Override
     public void delete(long id) {
         this.productRepository.deleteById(id);

@@ -1,8 +1,9 @@
 package com.demo.api.product.controller;
 
 import com.demo.api.product.dto.filter.ProductFilter;
+import com.demo.api.product.dto.request.ProductAddRequest;
+import com.demo.api.product.dto.request.ProductUpdateRequest;
 import com.demo.api.product.dto.response.ProductResponse;
-import com.demo.api.product.entity.Product;
 import com.demo.api.product.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,17 +23,17 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable long id) {
+    public ResponseEntity<ProductResponse> getById(@PathVariable long id) {
         return ResponseEntity.ok(this.productService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable long id, @RequestBody Product request) {
+    public ResponseEntity<ProductResponse> update(@PathVariable long id, @RequestBody ProductUpdateRequest request) {
         return ResponseEntity.ok(this.productService.update(id, request));
     }
 
     @PostMapping
-    public ResponseEntity<Product> add(@RequestBody Product request) {
+    public ResponseEntity<ProductResponse> add(@RequestBody ProductAddRequest request) {
         return ResponseEntity.ok(this.productService.add(request));
     }
 
